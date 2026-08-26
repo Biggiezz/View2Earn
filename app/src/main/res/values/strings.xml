@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">View2Earn</string>
+
+    <!-- Main Screen -->
+    <string name="main_header_title">Xem Quảng Cáo Kiếm Tiền</string>
+    <string name="main_header_subtitle">Nền tảng phần thưởng chuyên nghiệp</string>
+    <string name="tab_home">Trang chủ</string>
+    <string name="tab_account">Tài khoản</string>
+    <string name="label_available_balance">Số dư khả dụng</string>
+    <string name="sample_balance">$ 1.615</string>
+    <string name="currency_usd">USD  ▼</string>
+    <string name="subtext_change_currency">Nhấn để đổi tiền tệ</string>
+    <string name="label_daily_progress">Tiến trình hàng ngày</string>
+    <string name="sample_daily_amount">$0.000 / $1.000 USD</string>
+    <string name="sample_daily_status">0 đã xác nhận | 3 chờ cài đặt</string>
+    <string name="label_reset_limit">Giới hạn hàng ngày đặt lại sau</string>
+    <string name="sample_reset_timer">02:47:36</string>
+    <string name="section_quick_actions">Thao tác nhanh</string>
+    <string name="action_watch_ads_title">Xem quảng cáo</string>
+    <string name="action_watch_ads_desc">Kiếm tiền từ quảng cáo</string>
+    <string name="action_rate_app_title">Đánh giá ứng dụng</string>
+    <string name="action_rate_app_desc">Kiếm $1.000</string>
+
+    <!-- Login Screen -->
+    <string name="login_title">Đăng nhập</string>
+    <string name="login_subtitle">Chào mừng bạn trở lại với View2Earn</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Mật khẩu</string>
+    <string name="btn_login">Đăng nhập</string>
+    <string name="text_no_account">Chưa có tài khoản? </string>
+    <string name="action_register_now">Đăng ký ngay</string>
+
+    <!-- Register Screen -->
+    <string name="register_title">Đăng ký</string>
+    <string name="register_subtitle">Tạo tài khoản để bắt đầu kiếm tiền</string>
+    <string name="hint_full_name">Họ và tên</string>
+    <string name="hint_confirm_password">Nhập lại mật khẩu</string>
+    <string name="btn_register">Đăng ký</string>
+    <string name="text_already_have_account">Đã có tài khoản? </string>
+    <string name="action_login_now">Đăng nhập ngay</string>
+</resources>
