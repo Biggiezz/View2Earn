@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/neutral_bg"
     android:fillViewport="true"
+    android:id="@+id/login_activity"
     tools:context=".LoginActivity">
 
     <LinearLayout
@@ -21,17 +22,6 @@
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/spacing_md"
             android:paddingVertical="@dimen/spacing_md">
-
-            <ImageView
-                android:id="@+id/btnBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:contentDescription="Quay lại"
-                android:focusable="true"
-                android:padding="@dimen/spacing_sm"
-                android:src="@drawable/ic_back" />
 
             <TextView
                 android:layout_width="0dp"
@@ -54,12 +44,22 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingHorizontal="@dimen/spacing_xl"
-            android:paddingTop="@dimen/spacing_lg"
+            android:paddingTop="@dimen/spacing_md"
             android:paddingBottom="@dimen/spacing_xl">
+
+            <!-- App Logo -->
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/spacing_md"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/logo" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:text="@string/login_subtitle"
                 android:textColor="@color/text_secondary"
                 android:textSize="@dimen/text_secondary" />

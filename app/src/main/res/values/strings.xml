@@ -38,4 +38,11 @@
     <string name="btn_register">Đăng ký</string>
     <string name="text_already_have_account">Đã có tài khoản? </string>
     <string name="action_login_now">Đăng nhập ngay</string>
+
+    <!-- Logout -->
+    <string name="btn_logout">Đăng xuất</string>
+    <string name="logout_confirm_title">Xác nhận đăng xuất</string>
+    <string name="logout_confirm_message">Bạn có chắc chắn muốn đăng xuất tài khoản?</string>
+    <string name="dialog_cancel">Hủy</string>
+    <string name="dialog_confirm">Đồng ý</string>
 </resources>
