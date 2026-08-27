@@ -26,6 +26,7 @@ import com.nguyenmanhphuc.view2earn.app.models.User;
 import com.nguyenmanhphuc.view2earn.app.services.HttpRequest;
 import com.nguyenmanhphuc.view2earn.app.services.Response;
 import com.nguyenmanhphuc.view2earn.app.utils.SessionManager;
+import com.vuhongcat.view2earn.app.BuildConfig;
 import com.vuhongcat.view2earn.app.R;
 
 import java.text.DecimalFormat;
