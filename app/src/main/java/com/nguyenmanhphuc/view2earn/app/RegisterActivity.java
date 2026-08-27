@@ -16,6 +16,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.nguyenmanhphuc.view2earn.app.models.User;
 import com.nguyenmanhphuc.view2earn.app.services.HttpRequest;
 import com.nguyenmanhphuc.view2earn.app.services.Response;
+import com.vuhongcat.view2earn.app.R;
 
 import java.util.HashMap;
 import java.util.Map;

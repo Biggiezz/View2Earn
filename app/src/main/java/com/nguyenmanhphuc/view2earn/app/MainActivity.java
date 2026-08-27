@@ -26,6 +26,7 @@ import com.nguyenmanhphuc.view2earn.app.models.User;
 import com.nguyenmanhphuc.view2earn.app.services.HttpRequest;
 import com.nguyenmanhphuc.view2earn.app.services.Response;
 import com.nguyenmanhphuc.view2earn.app.utils.SessionManager;
+import com.vuhongcat.view2earn.app.R;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Lấy AdMob Rewarded Ad Unit ID từ BuildConfig (tự động theo Debug / Release)
     private static final String AD_UNIT_ID = BuildConfig.ADMOB_REWARDED_AD_ID;
-    private static final double REWARD_PER_AD = 0.50; // Mỗi lượt xem nhận $0.50
+    private static final double REWARD_PER_AD = 0.001; // Mỗi lượt xem nhận $0.001
 
     private TextView tvBalance;
     private TextView tvResetTimer;

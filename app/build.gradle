@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.nguyenmanhphuc.view2earn.app'
+    namespace 'com.vuhongcat.view2earn.app'
     compileSdk 35
 
     defaultConfig {
-        applicationId "com.nguyenmanhphuc.view2earn.app"
+        applicationId "com.vuhongcat.view2earn.app"
         minSdk 24
         targetSdk 35
         versionCode 2
