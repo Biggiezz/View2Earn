@@ -26,6 +26,7 @@
     <string name="login_subtitle">Chào mừng bạn trở lại với View2Earn</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Mật khẩu</string>
+    <string name="remember_me">Ghi nhớ đăng nhập</string>
     <string name="btn_login">Đăng nhập</string>
     <string name="text_no_account">Chưa có tài khoản? </string>
     <string name="action_register_now">Đăng ký ngay</string>

@@ -3,7 +3,6 @@ package com.nguyenmanhphuc.view2earn.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,6 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputEditText;
 import com.nguyenmanhphuc.view2earn.app.models.User;
 import com.nguyenmanhphuc.view2earn.app.services.HttpRequest;
@@ -29,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private TextInputEditText etEmail;
     private TextInputEditText etPassword;
+    private MaterialCheckBox cbRememberMe;
     private MaterialButton btnLogin;
     private TextView tvRegister;
     private SessionManager sessionManager;
@@ -36,13 +37,24 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sessionManager = SessionManager.getInstance(this);
+
+        // Kiểm tra tự động đăng nhập: Chỉ tự động vào MainActivity nếu người dùng đã tích "Remember me"
+        if (sessionManager.shouldAutoLogin()) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_login);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.login_activity), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        sessionManager = SessionManager.getInstance(this);
 
         initViews();
         setupListeners();
@@ -51,15 +63,22 @@ public class LoginActivity extends AppCompatActivity {
     private void initViews() {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
+        cbRememberMe = findViewById(R.id.cbRememberMe);
         btnLogin = findViewById(R.id.btnLogin);
         tvRegister = findViewById(R.id.tvRegister);
+
+        // Đặt trạng thái checkbox Remember me mặc định
+        cbRememberMe.setChecked(sessionManager.isRememberMe());
+        if (sessionManager.isRememberMe() && !sessionManager.getEmail().isEmpty()) {
+            etEmail.setText(sessionManager.getEmail());
+        }
     }
 
     private void setupListeners() {
-
         btnLogin.setOnClickListener(v -> {
             String emailOrUsername = etEmail.getText() != null ? etEmail.getText().toString().trim() : "";
             String password = etPassword.getText() != null ? etPassword.getText().toString().trim() : "";
+            boolean isRememberMe = cbRememberMe.isChecked();
 
             if (TextUtils.isEmpty(emailOrUsername)) {
                 etEmail.setError("Vui lòng nhập email hoặc username");
@@ -93,11 +112,11 @@ public class LoginActivity extends AppCompatActivity {
                     if (response.isSuccessful() && response.body() != null) {
                         Response<User> res = response.body();
                         if (res.isSuccess() || res.getData() != null) {
-                            // Lưu session người dùng và số dư
-                            sessionManager.saveUser(res.getData());
+                            // Lưu session người dùng kèm trạng thái Remember Me
+                            sessionManager.saveUser(res.getData(), isRememberMe);
 
                             Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-                            
+
                             // Chuyển sang MainActivity và xoá ngăn xếp activity cũ
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

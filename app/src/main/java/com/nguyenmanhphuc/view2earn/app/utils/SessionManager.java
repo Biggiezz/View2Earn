@@ -13,6 +13,7 @@ public class SessionManager {
     private static final String KEY_TOKEN = "token";
     private static final String KEY_BALANCE = "balance";
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
+    private static final String KEY_REMEMBER_ME = "remember_me";
 
     private final SharedPreferences pref;
     private final SharedPreferences.Editor editor;
@@ -30,15 +31,33 @@ public class SessionManager {
         return instance;
     }
 
-    public void saveUser(User user) {
+    public void saveUser(User user, boolean rememberMe) {
         if (user == null) return;
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
+        editor.putBoolean(KEY_REMEMBER_ME, rememberMe);
         if (user.getId() != null) editor.putString(KEY_USER_ID, user.getId());
         if (user.getUsername() != null) editor.putString(KEY_USERNAME, user.getUsername());
         if (user.getEmail() != null) editor.putString(KEY_EMAIL, user.getEmail());
         if (user.getToken() != null) editor.putString(KEY_TOKEN, user.getToken());
         editor.putFloat(KEY_BALANCE, (float) user.getBalance());
         editor.apply();
+    }
+
+    public void saveUser(User user) {
+        saveUser(user, false);
+    }
+
+    public void setRememberMe(boolean rememberMe) {
+        editor.putBoolean(KEY_REMEMBER_ME, rememberMe);
+        editor.apply();
+    }
+
+    public boolean isRememberMe() {
+        return pref.getBoolean(KEY_REMEMBER_ME, false);
+    }
+
+    public boolean shouldAutoLogin() {
+        return isLoggedIn() && isRememberMe();
     }
 
     public void updateBalance(double balance) {
@@ -56,6 +75,10 @@ public class SessionManager {
 
     public String getUsername() {
         return pref.getString(KEY_USERNAME, "Guest");
+    }
+
+    public String getEmail() {
+        return pref.getString(KEY_EMAIL, "");
     }
 
     public boolean isLoggedIn() {

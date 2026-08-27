@@ -107,12 +107,24 @@
                     android:textSize="@dimen/text_input" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Remember Me Checkbox -->
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cbRememberMe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_sm"
+                android:checked="false"
+                android:text="@string/remember_me"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_label"
+                app:buttonTint="@color/primary" />
+
             <!-- Login Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogin"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:layout_marginTop="@dimen/spacing_xl"
+                android:layout_marginTop="@dimen/spacing_lg"
                 android:text="@string/btn_login"
                 android:textColor="@color/on_primary"
                 android:textSize="@dimen/text_button"
