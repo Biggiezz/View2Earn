@@ -1,6 +1,6 @@
-package com.nguyenmanhphuc.view2earn.app.services;
+package com.vuhongcat.view2earn.app.services;
 
-import com.nguyenmanhphuc.view2earn.app.models.User;
+import com.vuhongcat.view2earn.app.models.User;
 
 import java.util.Map;
 

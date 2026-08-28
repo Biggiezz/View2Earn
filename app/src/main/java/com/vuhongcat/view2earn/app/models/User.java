@@ -1,4 +1,4 @@
-package com.nguyenmanhphuc.view2earn.app.models;
+package com.vuhongcat.view2earn.app.models;
 
 import com.google.gson.annotations.SerializedName;
 

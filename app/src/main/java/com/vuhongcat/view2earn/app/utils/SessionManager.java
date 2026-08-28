@@ -1,9 +1,9 @@
-package com.nguyenmanhphuc.view2earn.app.utils;
+package com.vuhongcat.view2earn.app.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.nguyenmanhphuc.view2earn.app.models.User;
+import com.vuhongcat.view2earn.app.models.User;
 
 public class SessionManager {
     private static final String PREF_NAME = "view2earn_session";

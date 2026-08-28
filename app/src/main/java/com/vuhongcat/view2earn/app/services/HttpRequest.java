@@ -1,4 +1,4 @@
-package com.nguyenmanhphuc.view2earn.app.services;
+package com.vuhongcat.view2earn.app.services;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

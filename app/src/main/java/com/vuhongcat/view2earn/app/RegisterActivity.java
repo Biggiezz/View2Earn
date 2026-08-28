@@ -1,4 +1,4 @@
-package com.nguyenmanhphuc.view2earn.app;
+package com.vuhongcat.view2earn.app;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,10 +13,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.nguyenmanhphuc.view2earn.app.models.User;
-import com.nguyenmanhphuc.view2earn.app.services.HttpRequest;
-import com.nguyenmanhphuc.view2earn.app.services.Response;
-import com.vuhongcat.view2earn.app.R;
+import com.vuhongcat.view2earn.app.models.User;
+import com.vuhongcat.view2earn.app.services.HttpRequest;
+import com.vuhongcat.view2earn.app.services.Response;
 
 import java.util.HashMap;
 import java.util.Map;

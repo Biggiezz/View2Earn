@@ -1,4 +1,4 @@
-package com.nguyenmanhphuc.view2earn.app;
+package com.vuhongcat.view2earn.app;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,12 +22,10 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.nguyenmanhphuc.view2earn.app.models.User;
-import com.nguyenmanhphuc.view2earn.app.services.HttpRequest;
-import com.nguyenmanhphuc.view2earn.app.services.Response;
-import com.nguyenmanhphuc.view2earn.app.utils.SessionManager;
-import com.vuhongcat.view2earn.app.BuildConfig;
-import com.vuhongcat.view2earn.app.R;
+import com.vuhongcat.view2earn.app.models.User;
+import com.vuhongcat.view2earn.app.services.HttpRequest;
+import com.vuhongcat.view2earn.app.services.Response;
+import com.vuhongcat.view2earn.app.utils.SessionManager;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
