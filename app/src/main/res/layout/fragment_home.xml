@@ -150,11 +150,11 @@
             android:textSize="@dimen/text_section_title"
             android:textStyle="bold" />
 
+        <!-- Hàng 1: 2 button -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_sm"
-            android:layout_marginBottom="@dimen/spacing_xl"
             android:baselineAligned="false"
             android:orientation="horizontal">
 
@@ -204,7 +204,7 @@
                 android:id="@+id/cardRateApp"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="@dimen/spacing_xs"
+                android:layout_marginStart="@dimen/spacing_xs"
                 android:layout_weight="1"
                 android:clickable="true"
                 android:focusable="true"
@@ -241,13 +241,23 @@
                         android:textSize="14sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <!-- Hàng 2: 1 button còn lại -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_sm"
+            android:layout_marginBottom="@dimen/spacing_xl"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
             <!-- Card Action: Mời bạn bè -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardInviteFriends"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/spacing_xs"
+                android:layout_marginEnd="@dimen/spacing_xs"
                 android:layout_weight="1"
                 android:clickable="true"
                 android:focusable="true"
@@ -285,6 +295,12 @@
                         android:textStyle="bold" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/spacing_xs"
+                android:layout_weight="1" />
         </LinearLayout>
 
     </LinearLayout>
