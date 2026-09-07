@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvDailyProgressStatus;
     private MaterialButton btnTabHome;
     private MaterialButton btnTabAccount;
-    private MaterialButton btnLogout;
     private MaterialButton btnCurrency;
     private MaterialCardView cardWatchAds;
     private MaterialCardView cardRateApp;
@@ -71,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         // Áp dụng WindowInsets an toàn với viền màn hình
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.activity_main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -111,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
         tvDailyProgressStatus = findViewById(R.id.tvDailyProgressStatus);
         btnTabHome = findViewById(R.id.btnTabHome);
         btnTabAccount = findViewById(R.id.btnTabAccount);
-        btnLogout = findViewById(R.id.btnLogout);
         btnCurrency = findViewById(R.id.btnCurrency);
         cardWatchAds = findViewById(R.id.cardWatchAds);
         cardRateApp = findViewById(R.id.cardRateApp);
@@ -140,9 +137,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        // Xử lý nút Đăng xuất
-        btnLogout.setOnClickListener(v -> performLogout());
 
         btnCurrency.setOnClickListener(v -> {
             isUSD = !isUSD;
@@ -272,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
                         sessionManager.updateBalance(currentBalance);
                         displayBalance(currentBalance);
 
-                        Toast.makeText(MainActivity.this, "🎉 Chúc mừng! Bạn vừa nhận được +$" + String.format(Locale.US, "%.2f", rewardAmount), Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, "🎉 Chúc mừng! Bạn vừa nhận được +$" + String.format(Locale.US, "%.3f", rewardAmount), Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(MainActivity.this, res.getMessage() != null ? res.getMessage() : "Lỗi cộng tiền", Toast.LENGTH_SHORT).show();
                     }
@@ -321,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void displayBalance(double balance) {
         if (isUSD) {
-            DecimalFormat df = new DecimalFormat("#,##0.00");
+            DecimalFormat df = new DecimalFormat("#,##0.000");
             tvBalance.setText("$" + df.format(balance));
         } else {
             // Quy đổi sang VND tỷ giá x25,000
