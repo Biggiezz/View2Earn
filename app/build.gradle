@@ -10,8 +10,8 @@ android {
         applicationId "com.vuhongcat.view2earn.app"
         minSdk 24
         targetSdk 36
-        versionCode 14
-        versionName "1.0.13"
+        versionCode 15
+        versionName "1.0.14"
 
         buildConfigField "String", "ADMOB_REWARDED_AD_ID", '"ca-app-pub-3940256099942544/5224354917"'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

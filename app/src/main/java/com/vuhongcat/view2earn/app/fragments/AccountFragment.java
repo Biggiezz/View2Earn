@@ -110,8 +110,7 @@ public class AccountFragment extends Fragment {
         String avatarLetter = username.substring(0, 1).toUpperCase(Locale.getDefault());
         tvAvatarChar.setText(avatarLetter);
 
-        double balance = sessionManager.getBalance();
-        tvStatDailyLimit.setText("$" + String.format(Locale.US, "%.3f", balance));
+        tvStatDailyLimit.setText("$10.000");
 
         String userId = sessionManager.getUserId();
         if (!userId.isEmpty()) {
@@ -123,9 +122,6 @@ public class AccountFragment extends Fragment {
                         User user = response.body().getData();
                         double freshBalance = user.getBalance();
                         sessionManager.updateBalance(freshBalance);
-                        if (tvStatDailyLimit != null) {
-                            tvStatDailyLimit.setText("$" + String.format(Locale.US, "%.3f", freshBalance));
-                        }
                         if (tvStatAdsWatched != null) {
                             tvStatAdsWatched.setText(String.valueOf(user.getAdsWatched()));
                         }

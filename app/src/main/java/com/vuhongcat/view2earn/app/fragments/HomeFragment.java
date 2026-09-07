@@ -49,6 +49,7 @@ public class HomeFragment extends Fragment {
 
     private static final String AD_UNIT_ID = BuildConfig.ADMOB_REWARDED_AD_ID;
     private static final double REWARD_PER_AD = 0.001;
+    private static final double DAILY_LIMIT_USD = 10.0;
 
     private TextView tvBalance;
     private TextView tvResetTimer;
@@ -171,6 +172,13 @@ public class HomeFragment extends Fragment {
     }
 
     private void showRewardedAd() {
+        if (currentBalance >= DAILY_LIMIT_USD) {
+            if (getContext() != null) {
+                Toast.makeText(getContext(), "Bạn đã đạt giới hạn 10$ hôm nay! Nút xem quảng cáo tạm thời bị khóa.", Toast.LENGTH_LONG).show();
+            }
+            return;
+        }
+
         if (sessionManager == null || !sessionManager.isLoggedIn()) {
             if (getContext() != null) {
                 Toast.makeText(getContext(), "Vui lòng đăng nhập tài khoản để nhận tiền thưởng!", Toast.LENGTH_LONG).show();
@@ -260,13 +268,40 @@ public class HomeFragment extends Fragment {
     }
 
     private void displayBalance(double balance) {
-        if (tvBalance == null) return;
-        if (isUSD) {
-            DecimalFormat df = new DecimalFormat("#,##0.000");
-            tvBalance.setText("$" + df.format(balance));
+        if (tvBalance != null) {
+            if (isUSD) {
+                DecimalFormat df = new DecimalFormat("#,##0.000");
+                tvBalance.setText("$" + df.format(balance));
+            } else {
+                DecimalFormat df = new DecimalFormat("#,###");
+                tvBalance.setText(df.format(balance * 25000) + " ₫");
+            }
+        }
+        updateDailyProgressUI();
+    }
+
+    private void updateDailyProgressUI() {
+        if (tvDailyProgressAmount == null || tvDailyProgressStatus == null || cardWatchAds == null) return;
+
+        double progress = Math.min(currentBalance, DAILY_LIMIT_USD);
+        String formattedProgress = String.format(Locale.US, "$%.3f / $10.000", progress);
+        tvDailyProgressAmount.setText(formattedProgress);
+
+        if (currentBalance >= DAILY_LIMIT_USD) {
+            tvDailyProgressStatus.setText("Đã đạt giới hạn $10.00 hôm nay! Nút xem QC tạm khóa.");
+            if (getContext() != null) {
+                tvDailyProgressStatus.setTextColor(androidx.core.content.ContextCompat.getColor(getContext(), R.color.error));
+            }
+            cardWatchAds.setEnabled(false);
+            cardWatchAds.setAlpha(0.5f);
         } else {
-            DecimalFormat df = new DecimalFormat("#,###");
-            tvBalance.setText(df.format(balance * 25000) + " ₫");
+            double percent = (progress / DAILY_LIMIT_USD) * 100.0;
+            tvDailyProgressStatus.setText(String.format(Locale.US, "Đã hoàn thành %.1f%% giới hạn hôm nay", percent));
+            if (getContext() != null) {
+                tvDailyProgressStatus.setTextColor(androidx.core.content.ContextCompat.getColor(getContext(), R.color.text_secondary));
+            }
+            cardWatchAds.setEnabled(true);
+            cardWatchAds.setAlpha(1.0f);
         }
     }
 
