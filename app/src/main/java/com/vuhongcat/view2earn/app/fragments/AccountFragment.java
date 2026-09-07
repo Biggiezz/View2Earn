@@ -48,6 +48,7 @@ public class AccountFragment extends Fragment {
     private MaterialButton btnAccountLogout;
     private LinearLayout layoutRecentWithdrawalsList;
     private View layoutRecentWithdrawalsEmpty;
+    private View layoutRecentWithdrawalsLoading;
 
     private SessionManager sessionManager;
 
@@ -88,6 +89,7 @@ public class AccountFragment extends Fragment {
         btnAccountLogout = view.findViewById(R.id.btnAccountLogout);
         layoutRecentWithdrawalsList = view.findViewById(R.id.layoutRecentWithdrawalsList);
         layoutRecentWithdrawalsEmpty = view.findViewById(R.id.layoutRecentWithdrawalsEmpty);
+        layoutRecentWithdrawalsLoading = view.findViewById(R.id.layoutRecentWithdrawalsLoading);
     }
 
     private void setupListeners() {
@@ -155,6 +157,11 @@ public class AccountFragment extends Fragment {
                 }
             });
 
+            // Hiển thị trạng thái Loading khi bắt đầu tải lịch sử giao dịch (Lazy Loading UI)
+            if (layoutRecentWithdrawalsLoading != null) layoutRecentWithdrawalsLoading.setVisibility(View.VISIBLE);
+            if (layoutRecentWithdrawalsList != null) layoutRecentWithdrawalsList.setVisibility(View.GONE);
+            if (layoutRecentWithdrawalsEmpty != null) layoutRecentWithdrawalsEmpty.setVisibility(View.GONE);
+
             // Tải lịch sử giao dịch / rút tiền
             HttpRequest.getInstance().call().getHistory(bearerToken).enqueue(new Callback<Response<HistoryData>>() {
                 @Override
@@ -178,8 +185,11 @@ public class AccountFragment extends Fragment {
     }
 
     private void renderTransactions(List<TransactionItem> items) {
-        if (layoutRecentWithdrawalsList == null) return;
+        if (layoutRecentWithdrawalsLoading != null) {
+            layoutRecentWithdrawalsLoading.setVisibility(View.GONE);
+        }
 
+        if (layoutRecentWithdrawalsList == null) return;
         layoutRecentWithdrawalsList.removeAllViews();
 
         java.util.List<TransactionItem> displayItems = new java.util.ArrayList<>();
@@ -223,7 +233,7 @@ public class AccountFragment extends Fragment {
                 title = "Rút tiền";
                 avatarChar = "R";
                 amountPrefix = "-$";
-            } else if ("REFERRAL_BONUS".equalsIgnoreCase(item.getType())) {
+            } else if ("REFERRAL_BONUS".equalsIgnoreCase(item.getType()) || "REFERRAL_REWARD".equalsIgnoreCase(item.getType())) {
                 title = "Thưởng giới thiệu";
                 avatarChar = "G";
                 amountPrefix = "+$";
@@ -251,10 +261,19 @@ public class AccountFragment extends Fragment {
             inputFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
             Date date = inputFormat.parse(isoDateStr);
 
-            SimpleDateFormat outputFormat = new SimpleDateFormat("dd MMM yyyy - HH:mm", Locale.getDefault());
+            // Định dạng ngày tháng năm theo Việt Nam (dd/MM/yyyy - HH:mm)
+            SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy - HH:mm", new Locale("vi", "VN"));
             return outputFormat.format(date);
         } catch (Exception e) {
-            return isoDateStr;
+            try {
+                SimpleDateFormat inputFormat2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+                inputFormat2.setTimeZone(TimeZone.getTimeZone("UTC"));
+                Date date2 = inputFormat2.parse(isoDateStr);
+                SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy - HH:mm", new Locale("vi", "VN"));
+                return outputFormat.format(date2);
+            } catch (Exception ex) {
+                return isoDateStr;
+            }
         }
     }
 

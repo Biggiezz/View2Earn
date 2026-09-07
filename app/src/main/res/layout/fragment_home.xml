@@ -40,6 +40,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_sm"
+                    android:text="@string/sample_balance"
                     android:textColor="@color/text_primary"
                     android:textSize="@dimen/text_big_number"
                     android:textStyle="bold" />
@@ -132,6 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_xs"
+                    android:text="@string/sample_reset_timer"
                     android:textColor="@color/primary"
                     android:textSize="@dimen/text_timer"
                     android:textStyle="bold" />
