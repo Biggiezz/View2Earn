@@ -36,4 +36,8 @@ public interface ApiService {
     // Lấy lịch sử nhận thưởng / rút tiền
     @GET("api/users/history")
     Call<Response<com.vuhongcat.view2earn.app.models.HistoryData>> getHistory(@Header("Authorization") String token);
+
+    // Nhập mã giới thiệu của bạn bè nhận thưởng $1.00
+    @POST("api/referral/claim")
+    Call<Response<Object>> claimReferralCode(@Header("Authorization") String token, @Body Map<String, Object> body);
 }

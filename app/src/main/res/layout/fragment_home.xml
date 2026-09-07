@@ -155,13 +155,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_sm"
             android:layout_marginBottom="@dimen/spacing_xl"
+            android:baselineAligned="false"
             android:orientation="horizontal">
 
             <!-- Card Action: Xem quảng cáo -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardWatchAds"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginEnd="@dimen/spacing_xs"
                 android:layout_weight="1"
                 android:clickable="true"
@@ -172,7 +173,8 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
+                    android:layout_height="match_parent"
+                    android:minHeight="100dp"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="@dimen/spacing_md">
@@ -201,7 +203,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardRateApp"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginHorizontal="@dimen/spacing_xs"
                 android:layout_weight="1"
                 android:clickable="true"
@@ -214,7 +216,8 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
+                    android:layout_height="match_parent"
+                    android:minHeight="100dp"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="@dimen/spacing_md">
@@ -243,7 +246,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardInviteFriends"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/spacing_xs"
                 android:layout_weight="1"
                 android:clickable="true"
@@ -256,7 +259,8 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
+                    android:layout_height="match_parent"
+                    android:minHeight="100dp"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="@dimen/spacing_md">

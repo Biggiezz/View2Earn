@@ -38,6 +38,8 @@ public class InviteFriendsActivity extends AppCompatActivity {
     private TextView tvQualified;
     private TextView tvPending;
     private TextView tvTotalEarned;
+    private com.google.android.material.textfield.TextInputEditText etInputReferralCode;
+    private MaterialButton btnClaimCode;
 
     private String currentReferralCode;
     private String currentShareLink;
@@ -72,12 +74,17 @@ public class InviteFriendsActivity extends AppCompatActivity {
         tvQualified = findViewById(R.id.tvQualified);
         tvPending = findViewById(R.id.tvPending);
         tvTotalEarned = findViewById(R.id.tvTotalEarned);
+        etInputReferralCode = findViewById(R.id.etInputReferralCode);
+        btnClaimCode = findViewById(R.id.btnClaimCode);
     }
 
     private void setupListeners() {
         btnBack.setOnClickListener(v -> finish());
         btnCopyCode.setOnClickListener(v -> copyReferralCodeToClipboard());
         btnShare.setOnClickListener(v -> shareReferralLink());
+        if (btnClaimCode != null) {
+            btnClaimCode.setOnClickListener(v -> handleClaimReferralCode());
+        }
     }
 
     private void updateUI() {
@@ -155,5 +162,57 @@ public class InviteFriendsActivity extends AppCompatActivity {
         shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
 
         startActivity(Intent.createChooser(shareIntent, "Chia sẻ mã giới thiệu qua"));
+    }
+
+    private void handleClaimReferralCode() {
+        if (etInputReferralCode == null) return;
+        String code = etInputReferralCode.getText() != null ? etInputReferralCode.getText().toString().trim() : "";
+        if (TextUtils.isEmpty(code)) {
+            Toast.makeText(this, "Vui lòng nhập mã giới thiệu!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String token = SessionManager.getInstance(this).getToken();
+        if (TextUtils.isEmpty(token)) {
+            Toast.makeText(this, "Vui lòng đăng nhập để sử dụng tính năng này!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Toast.makeText(this, "Đang xử lý áp dụng mã...", Toast.LENGTH_SHORT).show();
+
+        java.util.Map<String, Object> body = new java.util.HashMap<>();
+        body.put("referralCode", code);
+
+        HttpRequest.getInstance().call().claimReferralCode("Bearer " + token, body).enqueue(new Callback<Response<Object>>() {
+            @Override
+            public void onResponse(@NonNull Call<Response<Object>> call, @NonNull retrofit2.Response<Response<Object>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Response<Object> res = response.body();
+                    if (res.isSuccess()) {
+                        Toast.makeText(InviteFriendsActivity.this, "🎉 Chúc mừng! Áp dụng mã giới thiệu thành công (+ $1.00 thưởng)!", Toast.LENGTH_LONG).show();
+                        etInputReferralCode.setText("");
+                        fetchReferralData();
+                    } else {
+                        Toast.makeText(InviteFriendsActivity.this, res.getMessage() != null ? res.getMessage() : "Không thể áp dụng mã giới thiệu", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    try {
+                        String errJson = response.errorBody() != null ? response.errorBody().string() : "";
+                        if (!errJson.isEmpty()) {
+                            org.json.JSONObject obj = new org.json.JSONObject(errJson);
+                            String msg = obj.optString("message", "Lỗi áp dụng mã giới thiệu");
+                            Toast.makeText(InviteFriendsActivity.this, msg, Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    } catch (Exception ignored) {}
+                    Toast.makeText(InviteFriendsActivity.this, "Mã giới thiệu không hợp lệ hoặc đã được sử dụng!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Response<Object>> call, @NonNull Throwable t) {
+                Toast.makeText(InviteFriendsActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
