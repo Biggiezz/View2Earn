@@ -125,7 +125,18 @@ public class RegisterActivity extends AppCompatActivity {
                             Toast.makeText(RegisterActivity.this, res.getMessage() != null ? res.getMessage() : "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(RegisterActivity.this, "Đăng ký thất bại!", Toast.LENGTH_SHORT).show();
+                        String errorMsg = "Đăng ký thất bại!";
+                        if (response.errorBody() != null) {
+                            try {
+                                String errorJson = response.errorBody().string();
+                                org.json.JSONObject jsonObj = new org.json.JSONObject(errorJson);
+                                if (jsonObj.has("message")) {
+                                    errorMsg = jsonObj.getString("message");
+                                }
+                            } catch (Exception ignored) {
+                            }
+                        }
+                        Toast.makeText(RegisterActivity.this, errorMsg, Toast.LENGTH_LONG).show();
                     }
                 }
 
