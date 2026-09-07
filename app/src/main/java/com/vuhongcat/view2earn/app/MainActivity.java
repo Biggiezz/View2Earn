@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         // Áp dụng WindowInsets an toàn với viền màn hình
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.activity_main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -124,19 +125,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Đang ở Trang chủ", Toast.LENGTH_SHORT).show();
         });
 
-        btnTabAccount.setOnClickListener(v -> {
-            if (sessionManager.isLoggedIn()) {
-                new MaterialAlertDialogBuilder(this)
-                        .setTitle("Tài khoản của bạn")
-                        .setMessage("Tên người dùng: " + sessionManager.getUsername() + "\nSố dư: $" + String.format(Locale.US, "%.2f", currentBalance))
-                        .setPositiveButton("Đăng xuất", (dialog, which) -> performLogout())
-                        .setNegativeButton("Đóng", null)
-                        .show();
-            } else {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        });
+        btnTabAccount.setOnClickListener(v -> showAccountDialog());
 
         btnCurrency.setOnClickListener(v -> {
             isUSD = !isUSD;
@@ -322,6 +311,57 @@ public class MainActivity extends AppCompatActivity {
             DecimalFormat df = new DecimalFormat("#,###");
             tvBalance.setText(df.format(balance * 25000) + " ₫");
         }
+    }
+
+    /**
+     * Tải thông tin tài khoản và số dư mới nhất từ server trước khi hiển thị Dialog
+     */
+    private void showAccountDialog() {
+        if (!sessionManager.isLoggedIn()) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            return;
+        }
+
+        String userId = sessionManager.getUserId();
+        if (userId.isEmpty()) {
+            displayAccountDialog(currentBalance);
+            return;
+        }
+
+        HttpRequest.getInstance().call().getUserProfile(userId).enqueue(new Callback<Response<User>>() {
+            @Override
+            public void onResponse(Call<Response<User>> call, retrofit2.Response<Response<User>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess() && response.body().getData() != null) {
+                    currentBalance = response.body().getData().getBalance();
+                    sessionManager.updateBalance(currentBalance);
+                    displayBalance(currentBalance);
+                }
+                displayAccountDialog(currentBalance);
+            }
+
+            @Override
+            public void onFailure(Call<Response<User>> call, Throwable t) {
+                displayAccountDialog(currentBalance);
+            }
+        });
+    }
+
+    private void displayAccountDialog(double balance) {
+        String balanceStr;
+        if (isUSD) {
+            balanceStr = "$" + String.format(Locale.US, "%.3f", balance);
+        } else {
+            DecimalFormat df = new DecimalFormat("#,###");
+            balanceStr = df.format(balance * 25000) + " ₫";
+        }
+
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Tài khoản của bạn")
+                .setMessage("Tên người dùng: " + sessionManager.getUsername() + "\nEmail: " + sessionManager.getEmail() + "\nSố dư hiện tại: " + balanceStr)
+                .setPositiveButton("Đăng xuất", (dialog, which) -> performLogout())
+                .setNegativeButton("Đóng", null)
+                .show();
     }
 
     /**
