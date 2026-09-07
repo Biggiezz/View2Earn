@@ -1,6 +1,7 @@
 package com.vuhongcat.view2earn.app;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.widget.TextView;
@@ -379,15 +380,35 @@ public class MainActivity extends AppCompatActivity {
         Task<ReviewInfo> request = manager.requestReviewFlow();
 
         request.addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
+            if (task.isSuccessful() && task.getResult() != null) {
                 ReviewInfo reviewInfo = task.getResult();
                 Task<Void> flow = manager.launchReviewFlow(MainActivity.this, reviewInfo);
                 flow.addOnCompleteListener(reviewTask -> {
-                    Toast.makeText(MainActivity.this, "Cảm ơn bạn đã phản hồi!", Toast.LENGTH_SHORT).show();
+                    // In-App Review flow hoàn tất
                 });
             } else {
-                Toast.makeText(MainActivity.this, "Mở trang đánh giá ứng dụng trên Google Play...", Toast.LENGTH_SHORT).show();
+                // Tự động mở trực tiếp trang Google Play Store của app khi In-App Review API không hiển thị (ví dụ bản Debug APK)
+                openPlayStorePage();
             }
         });
+    }
+
+    /**
+     * Mở trực tiếp ứng dụng Google Play Store (hoặc trình duyệt web nếu thiết bị không có CH Play)
+     */
+    private void openPlayStorePage() {
+        String packageName = getPackageName();
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName));
+            intent.setPackage("com.android.vending");
+            startActivity(intent);
+        } catch (Exception e) {
+            try {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
+                startActivity(browserIntent);
+            } catch (Exception ex) {
+                Toast.makeText(this, "Không thể mở Google Play Store!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
