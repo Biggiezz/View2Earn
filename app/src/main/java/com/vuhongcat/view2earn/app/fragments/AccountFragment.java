@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -37,6 +38,7 @@ import retrofit2.Callback;
 
 public class AccountFragment extends Fragment {
 
+    private SwipeRefreshLayout swipeRefreshLayout;
     private TextView tvAvatarChar;
     private TextView tvAccountUsername;
     private TextView tvAccountSubtext;
@@ -51,6 +53,7 @@ public class AccountFragment extends Fragment {
     private View layoutRecentWithdrawalsLoading;
 
     private SessionManager sessionManager;
+    private boolean isHistoryLoaded = false;
 
     @Nullable
     @Override
@@ -68,16 +71,17 @@ public class AccountFragment extends Fragment {
 
         initViews(view);
         setupListeners();
-        loadAccountData();
+        loadAccountData(false);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        loadAccountData();
+        loadAccountData(false);
     }
 
     private void initViews(View view) {
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         tvAvatarChar = view.findViewById(R.id.tvAvatarChar);
         tvAccountUsername = view.findViewById(R.id.tvAccountUsername);
         tvAccountSubtext = view.findViewById(R.id.tvAccountSubtext);
@@ -96,9 +100,12 @@ public class AccountFragment extends Fragment {
         if (btnAccountLogout != null) {
             btnAccountLogout.setOnClickListener(v -> performLogout());
         }
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setOnRefreshListener(() -> loadAccountData(true));
+        }
     }
 
-    private void loadAccountData() {
+    private void loadAccountData(boolean forceRefresh) {
         if (sessionManager == null) return;
 
         String username = sessionManager.getUsername();
@@ -106,17 +113,24 @@ public class AccountFragment extends Fragment {
             username = "user_5524";
         }
 
-        tvAccountUsername.setText(username);
-        tvAccountGreeting.setText("Chào mừng trở lại, " + username);
+        if (tvAccountUsername != null) tvAccountUsername.setText(username);
+        if (tvAccountGreeting != null) tvAccountGreeting.setText("Chào mừng trở lại, " + username);
 
         String avatarLetter = username.substring(0, 1).toUpperCase(Locale.getDefault());
-        tvAvatarChar.setText(avatarLetter);
+        if (tvAvatarChar != null) tvAvatarChar.setText(avatarLetter);
 
-        tvStatDailyLimit.setText("$10.000");
+        if (tvStatDailyLimit != null) tvStatDailyLimit.setText("$10.000");
+
+        // Nếu đã load thành công và không phải chủ động kéo thả refresh (forceRefresh) thì không load lại
+        if (isHistoryLoaded && !forceRefresh) {
+            if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+            return;
+        }
 
         String userId = sessionManager.getUserId();
         if (!userId.isEmpty()) {
-            // Tải thông tin tài khoản & số dư & quảng cáo đã xem từ server MongoDB
             HttpRequest.getInstance().call().getUserProfile(userId).enqueue(new Callback<Response<User>>() {
                 @Override
                 public void onResponse(@NonNull Call<Response<User>> call, @NonNull retrofit2.Response<Response<User>> response) {
@@ -136,7 +150,6 @@ public class AccountFragment extends Fragment {
             });
         }
 
-        // Tải số liệu thống kê Referral
         String token = sessionManager.getToken();
         if (!token.isEmpty()) {
             String bearerToken = "Bearer " + token;
@@ -157,15 +170,20 @@ public class AccountFragment extends Fragment {
                 }
             });
 
-            // Hiển thị trạng thái Loading khi bắt đầu tải lịch sử giao dịch (Lazy Loading UI)
-            if (layoutRecentWithdrawalsLoading != null) layoutRecentWithdrawalsLoading.setVisibility(View.VISIBLE);
-            if (layoutRecentWithdrawalsList != null) layoutRecentWithdrawalsList.setVisibility(View.GONE);
-            if (layoutRecentWithdrawalsEmpty != null) layoutRecentWithdrawalsEmpty.setVisibility(View.GONE);
+            // Chỉ hiển thị loading card nếu chưa có dữ liệu ban đầu
+            if (!isHistoryLoaded) {
+                if (layoutRecentWithdrawalsLoading != null) layoutRecentWithdrawalsLoading.setVisibility(View.VISIBLE);
+                if (layoutRecentWithdrawalsList != null) layoutRecentWithdrawalsList.setVisibility(View.GONE);
+                if (layoutRecentWithdrawalsEmpty != null) layoutRecentWithdrawalsEmpty.setVisibility(View.GONE);
+            }
 
-            // Tải lịch sử giao dịch / rút tiền
             HttpRequest.getInstance().call().getHistory(bearerToken).enqueue(new Callback<Response<HistoryData>>() {
                 @Override
                 public void onResponse(@NonNull Call<Response<HistoryData>> call, @NonNull retrofit2.Response<Response<HistoryData>> response) {
+                    isHistoryLoaded = true;
+                    if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
                     if (response.isSuccessful() && response.body() != null && response.body().isSuccess() && response.body().getData() != null) {
                         List<TransactionItem> items = response.body().getData().getTransactions();
                         renderTransactions(items);
@@ -176,10 +194,18 @@ public class AccountFragment extends Fragment {
 
                 @Override
                 public void onFailure(@NonNull Call<Response<HistoryData>> call, @NonNull Throwable t) {
+                    isHistoryLoaded = true;
+                    if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
                     renderTransactions(null);
                 }
             });
         } else {
+            isHistoryLoaded = true;
+            if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
+                swipeRefreshLayout.setRefreshing(false);
+            }
             renderTransactions(null);
         }
     }
