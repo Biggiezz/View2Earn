@@ -32,4 +32,8 @@ public interface ApiService {
     // Lấy thông tin mã giới thiệu cá nhân & thống kê
     @GET("api/referral/me")
     Call<Response<ReferralData>> getReferralMe(@Header("Authorization") String token);
+
+    // Lấy lịch sử nhận thưởng / rút tiền
+    @GET("api/users/history")
+    Call<Response<com.vuhongcat.view2earn.app.models.HistoryData>> getHistory(@Header("Authorization") String token);
 }

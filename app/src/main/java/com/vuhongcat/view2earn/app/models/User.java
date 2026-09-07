@@ -21,6 +21,9 @@ public class User {
     @SerializedName("balance")
     private double balance;
 
+    @SerializedName("adsWatched")
+    private int adsWatched;
+
     @SerializedName("token")
     private String token;
 
@@ -83,6 +86,14 @@ public class User {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public int getAdsWatched() {
+        return adsWatched;
+    }
+
+    public void setAdsWatched(int adsWatched) {
+        this.adsWatched = adsWatched;
     }
 
     public String getToken() {
