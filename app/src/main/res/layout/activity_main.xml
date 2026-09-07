@@ -2,11 +2,11 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/neutral_bg"
     android:fillViewport="true"
-    android:id="@+id/activity_main"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -15,7 +15,7 @@
         android:orientation="vertical"
         android:padding="@dimen/spacing_lg">
 
-        <!-- Header: Title & Subtitle + Logout Button -->
+        <!-- Header: Title, Subtitle & Logout -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,41 +26,25 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <!-- Header Logo -->
-                <ImageView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:layout_marginEnd="@dimen/spacing_md"
-                    android:contentDescription="@string/app_name"
-                    android:src="@drawable/logo" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
+                <TextView
+                    android:id="@+id/tvAppTitle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:text="@string/main_header_title"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_screen_header"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/tvAppTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/main_header_title"
-                        android:textColor="@color/text_primary"
-                        android:textSize="@dimen/text_screen_header"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvAppSubtitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs"
-                        android:text="@string/main_header_subtitle"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="@dimen/text_secondary" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/tvAppSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:text="@string/main_header_subtitle"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_secondary" />
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
@@ -68,14 +52,9 @@
                 style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:paddingHorizontal="@dimen/spacing_sm"
-                android:text="@string/btn_logout"
-                android:textColor="@color/error"
-                android:textSize="@dimen/text_caption"
-                android:textStyle="bold"
-                app:cornerRadius="@dimen/corner_radius_sm" />
+                android:text="Đăng xuất"
+                android:textColor="@color/primary"
+                android:textSize="@dimen/text_button" />
         </LinearLayout>
 
         <!-- Tab Toggle (Trang chủ | Tài khoản) -->
@@ -153,6 +132,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_sm"
+                    android:text="@string/sample_balance"
                     android:textColor="@color/text_primary"
                     android:textSize="@dimen/text_big_number"
                     android:textStyle="bold" />
@@ -245,6 +225,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_xs"
+                    android:text="@string/sample_reset_timer"
                     android:textColor="@color/primary"
                     android:textSize="@dimen/text_timer"
                     android:textStyle="bold" />
@@ -311,7 +292,7 @@
                 android:id="@+id/cardRateApp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_xs"
+                android:layout_marginHorizontal="@dimen/spacing_xs"
                 android:layout_weight="1"
                 android:clickable="true"
                 android:focusable="true"
@@ -343,6 +324,47 @@
                         android:text="@string/action_rate_app_desc"
                         android:textColor="@color/text_secondary"
                         android:textSize="@dimen/text_caption" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Card Action: Mời bạn bè -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardInviteFriends"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_xs"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/surface"
+                app:cardCornerRadius="@dimen/corner_radius_lg"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/border_color"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:gravity="bottom"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_md">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/invite_friends_header"
+                        android:textColor="@color/text_primary"
+                        android:textSize="@dimen/text_body"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:text="Mời &amp; nhận $1.00"
+                        android:textColor="@color/primary"
+                        android:textSize="@dimen/text_caption"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>

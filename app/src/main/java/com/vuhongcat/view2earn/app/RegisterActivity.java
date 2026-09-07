@@ -30,6 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputEditText etEmail;
     private TextInputEditText etPassword;
     private TextInputEditText etConfirmPassword;
+    private TextInputEditText etReferralCode;
     private MaterialButton btnRegister;
     private TextView tvLogin;
 
@@ -52,6 +53,7 @@ public class RegisterActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
+        etReferralCode = findViewById(R.id.etReferralCode);
         btnRegister = findViewById(R.id.btnRegister);
         tvLogin = findViewById(R.id.tvLogin);
     }
@@ -98,10 +100,15 @@ public class RegisterActivity extends AppCompatActivity {
             btnRegister.setEnabled(false);
             btnRegister.setText("Đang đăng ký...");
 
+            String referralCode = etReferralCode != null && etReferralCode.getText() != null ? etReferralCode.getText().toString().trim() : "";
+
             Map<String, Object> body = new HashMap<>();
             body.put("username", fullName);
             body.put("email", email);
             body.put("password", password);
+            if (!TextUtils.isEmpty(referralCode)) {
+                body.put("referralCode", referralCode);
+            }
 
             HttpRequest.getInstance().call().register(body).enqueue(new Callback<Response<User>>() {
                 @Override

@@ -22,6 +22,10 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
+import com.google.android.gms.tasks.Task;
 import com.vuhongcat.view2earn.app.models.User;
 import com.vuhongcat.view2earn.app.services.HttpRequest;
 import com.vuhongcat.view2earn.app.services.Response;
@@ -52,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private MaterialButton btnCurrency;
     private MaterialCardView cardWatchAds;
     private MaterialCardView cardRateApp;
+    private MaterialCardView cardInviteFriends;
 
     private RewardedAd rewardedAd;
     private boolean isLoadingAd = false;
@@ -109,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
         btnCurrency = findViewById(R.id.btnCurrency);
         cardWatchAds = findViewById(R.id.cardWatchAds);
         cardRateApp = findViewById(R.id.cardRateApp);
+        cardInviteFriends = findViewById(R.id.cardInviteFriends);
 
         // Hiển thị số dư tạm từ session trước khi gọi API
         currentBalance = sessionManager.getBalance();
@@ -148,8 +154,13 @@ public class MainActivity extends AppCompatActivity {
             showRewardedAd();
         });
 
-        cardRateApp.setOnClickListener(v -> {
-            Toast.makeText(this, "Chức năng đang được phát triển", Toast.LENGTH_SHORT).show();
+        // Feature A: Google Play In-App Review API Integration (Zero Coin Reward, Strict Google Policy Compliance)
+        cardRateApp.setOnClickListener(v -> launchInAppReview());
+
+        // Feature B: Invite Friends / Referral Screen
+        cardInviteFriends.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, InviteFriendsActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -357,5 +368,26 @@ public class MainActivity extends AppCompatActivity {
                 startDailyResetTimer();
             }
         }.start();
+    }
+
+    /**
+     * Khởi chạy Google Play In-App Review API một cách trung lập
+     * KHÔNG tạo thưởng coin, KHÔNG gọi API cộng tiền nhằm tuân thủ 100% Google Play Policy.
+     */
+    private void launchInAppReview() {
+        ReviewManager manager = ReviewManagerFactory.create(this);
+        Task<ReviewInfo> request = manager.requestReviewFlow();
+
+        request.addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                ReviewInfo reviewInfo = task.getResult();
+                Task<Void> flow = manager.launchReviewFlow(MainActivity.this, reviewInfo);
+                flow.addOnCompleteListener(reviewTask -> {
+                    Toast.makeText(MainActivity.this, "Cảm ơn bạn đã phản hồi!", Toast.LENGTH_SHORT).show();
+                });
+            } else {
+                Toast.makeText(MainActivity.this, "Mở trang đánh giá ứng dụng trên Google Play...", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

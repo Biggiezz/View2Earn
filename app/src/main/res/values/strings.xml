@@ -19,14 +19,13 @@
     <string name="action_watch_ads_title">Xem quảng cáo</string>
     <string name="action_watch_ads_desc">Kiếm tiền từ quảng cáo</string>
     <string name="action_rate_app_title">Đánh giá ứng dụng</string>
-    <string name="action_rate_app_desc">Kiếm $1.000</string>
+    <string name="action_rate_app_desc">Đánh giá trên Google Play</string>
 
     <!-- Login Screen -->
     <string name="login_title">Đăng nhập</string>
     <string name="login_subtitle">Chào mừng bạn trở lại với View2Earn</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Mật khẩu</string>
-    <string name="remember_me">Ghi nhớ đăng nhập</string>
     <string name="btn_login">Đăng nhập</string>
     <string name="text_no_account">Chưa có tài khoản? </string>
     <string name="action_register_now">Đăng ký ngay</string>
@@ -36,14 +35,30 @@
     <string name="register_subtitle">Tạo tài khoản để bắt đầu kiếm tiền</string>
     <string name="hint_full_name">Họ và tên</string>
     <string name="hint_confirm_password">Nhập lại mật khẩu</string>
+    <string name="hint_referral_code_optional">Mã giới thiệu (không bắt buộc)</string>
     <string name="btn_register">Đăng ký</string>
     <string name="text_already_have_account">Đã có tài khoản? </string>
     <string name="action_login_now">Đăng nhập ngay</string>
 
-    <!-- Logout -->
-    <string name="btn_logout">Đăng xuất</string>
-    <string name="logout_confirm_title">Xác nhận đăng xuất</string>
-    <string name="logout_confirm_message">Bạn có chắc chắn muốn đăng xuất tài khoản?</string>
+    <!-- Invite Friends / Referral Screen -->
+    <string name="invite_friends_header">Mời bạn bè</string>
+    <string name="invite_friends_title">Mời bạn bè &amp; Nhận phần thưởng</string>
+    <string name="invite_friends_desc">Mời bạn bè tham gia View2Earn và nhận $1.00 khi họ hoàn thành 5 video quảng cáo hợp lệ.</string>
+    <string name="label_your_referral_code">Mã giới thiệu của bạn</string>
+    <string name="btn_copy">Sao chép</string>
+    <string name="btn_invite_friends">Mời bạn bè ngay</string>
+    <string name="section_referral_stats">Thống kê giới thiệu</string>
+    <string name="stat_invited">Đã mời</string>
+    <string name="stat_qualified">Đủ điều kiện</string>
+    <string name="stat_pending">Đang chờ</string>
+    <string name="stat_total_earned">Tổng nhận được</string>
+    <string name="section_how_it_works">Cách thức hoạt động</string>
+    <string name="step_1">1. Chia sẻ liên kết/mã giới thiệu của bạn</string>
+    <string name="step_2">2. Bạn bè tải app và tạo tài khoản</string>
+    <string name="step_3">3. Bạn bè xem đủ 5 video quảng cáo hợp lệ</string>
+    <string name="step_4">4. Bạn nhận được $1.00 phần thưởng vào ví</string>
+    <string name="logout_confirm_title">Đăng xuất</string>
+    <string name="logout_confirm_message">Bạn có chắc chắn muốn đăng xuất?</string>
+    <string name="dialog_confirm">Xác nhận</string>
     <string name="dialog_cancel">Hủy</string>
-    <string name="dialog_confirm">Đồng ý</string>
 </resources>

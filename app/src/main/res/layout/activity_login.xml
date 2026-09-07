@@ -2,11 +2,11 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/neutral_bg"
     android:fillViewport="true"
-    android:id="@+id/login_activity"
     tools:context=".LoginActivity">
 
     <LinearLayout
@@ -22,6 +22,17 @@
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/spacing_md"
             android:paddingVertical="@dimen/spacing_md">
+
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="Quay lại"
+                android:focusable="true"
+                android:padding="@dimen/spacing_sm"
+                android:src="@drawable/ic_back" />
 
             <TextView
                 android:layout_width="0dp"
@@ -44,22 +55,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingHorizontal="@dimen/spacing_xl"
-            android:paddingTop="@dimen/spacing_md"
+            android:paddingTop="@dimen/spacing_lg"
             android:paddingBottom="@dimen/spacing_xl">
-
-            <!-- App Logo -->
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="@dimen/spacing_md"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/logo" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
                 android:text="@string/login_subtitle"
                 android:textColor="@color/text_secondary"
                 android:textSize="@dimen/text_secondary" />
@@ -107,24 +108,20 @@
                     android:textSize="@dimen/text_input" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Remember Me Checkbox -->
             <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/cbRememberMe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_sm"
-                android:checked="false"
-                android:text="@string/remember_me"
-                android:textColor="@color/text_secondary"
-                android:textSize="@dimen/text_label"
-                app:buttonTint="@color/primary" />
+                android:text="Ghi nhớ đăng nhập"
+                android:textColor="@color/text_secondary" />
 
             <!-- Login Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogin"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:layout_marginTop="@dimen/spacing_lg"
+                android:layout_marginTop="@dimen/spacing_md"
                 android:text="@string/btn_login"
                 android:textColor="@color/on_primary"
                 android:textSize="@dimen/text_button"
