@@ -170,12 +170,10 @@ public class AccountFragment extends Fragment {
                 }
             });
 
-            // Chỉ hiển thị loading card nếu chưa có dữ liệu ban đầu
-            if (!isHistoryLoaded) {
-                if (layoutRecentWithdrawalsLoading != null) layoutRecentWithdrawalsLoading.setVisibility(View.VISIBLE);
-                if (layoutRecentWithdrawalsList != null) layoutRecentWithdrawalsList.setVisibility(View.GONE);
-                if (layoutRecentWithdrawalsEmpty != null) layoutRecentWithdrawalsEmpty.setVisibility(View.GONE);
-            }
+            // Hiển thị trạng thái loading cho lịch sử giao dịch khi tải lại
+            if (layoutRecentWithdrawalsLoading != null) layoutRecentWithdrawalsLoading.setVisibility(View.VISIBLE);
+            if (layoutRecentWithdrawalsList != null) layoutRecentWithdrawalsList.setVisibility(View.GONE);
+            if (layoutRecentWithdrawalsEmpty != null) layoutRecentWithdrawalsEmpty.setVisibility(View.GONE);
 
             HttpRequest.getInstance().call().getHistory(bearerToken).enqueue(new Callback<Response<HistoryData>>() {
                 @Override
