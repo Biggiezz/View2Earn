@@ -186,7 +186,15 @@ public class AccountFragment extends Fragment {
 
         layoutRecentWithdrawalsList.removeAllViews();
 
-        if (items == null || items.isEmpty()) {
+        java.util.List<TransactionItem> displayItems = new java.util.ArrayList<>();
+        if (items != null) {
+            for (TransactionItem item : items) {
+                // Ưu tiên hiển thị các giao dịch rút tiền hoặc giao dịch thưởng
+                displayItems.add(item);
+            }
+        }
+
+        if (displayItems.isEmpty()) {
             if (layoutRecentWithdrawalsEmpty != null) {
                 layoutRecentWithdrawalsEmpty.setVisibility(View.VISIBLE);
             }
@@ -201,9 +209,9 @@ public class AccountFragment extends Fragment {
 
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
-        int limit = Math.min(items.size(), 10);
+        int limit = Math.min(displayItems.size(), 10);
         for (int i = 0; i < limit; i++) {
-            TransactionItem item = items.get(i);
+            TransactionItem item = displayItems.get(i);
             View itemView = inflater.inflate(R.layout.item_recent_withdrawal, layoutRecentWithdrawalsList, false);
 
             TextView tvItemAvatarChar = itemView.findViewById(R.id.tvItemAvatarChar);
@@ -211,21 +219,25 @@ public class AccountFragment extends Fragment {
             TextView tvItemDate = itemView.findViewById(R.id.tvItemDate);
             TextView tvItemAmount = itemView.findViewById(R.id.tvItemAmount);
 
-            String title = "Xem Quảng Cáo";
+            String title = "Thưởng xem QC";
             String avatarChar = "Q";
+            String amountPrefix = "+$";
+
             if ("WITHDRAWAL".equalsIgnoreCase(item.getType())) {
                 title = "Rút tiền";
                 avatarChar = "R";
+                amountPrefix = "-$";
             } else if ("REFERRAL_BONUS".equalsIgnoreCase(item.getType())) {
                 title = "Thưởng giới thiệu";
                 avatarChar = "G";
+                amountPrefix = "+$";
             }
 
             if (tvItemTitle != null) tvItemTitle.setText(title);
             if (tvItemAvatarChar != null) tvItemAvatarChar.setText(avatarChar);
 
             if (tvItemAmount != null) {
-                tvItemAmount.setText("+$" + String.format(Locale.US, "%.3f", item.getAmount()));
+                tvItemAmount.setText(amountPrefix + String.format(Locale.US, "%.3f", item.getAmount()));
             }
 
             if (tvItemDate != null) {
