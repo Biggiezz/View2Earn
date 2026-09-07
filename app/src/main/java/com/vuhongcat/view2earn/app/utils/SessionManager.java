@@ -81,6 +81,10 @@ public class SessionManager {
         return pref.getString(KEY_EMAIL, "");
     }
 
+    public String getToken() {
+        return pref.getString(KEY_TOKEN, "");
+    }
+
     public boolean isLoggedIn() {
         return pref.getBoolean(KEY_IS_LOGGED_IN, false);
     }
