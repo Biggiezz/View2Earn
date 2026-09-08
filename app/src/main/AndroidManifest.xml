@@ -41,6 +41,10 @@
         <activity
             android:name=".InviteFriendsActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".WithdrawActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

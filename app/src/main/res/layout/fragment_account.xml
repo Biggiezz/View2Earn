@@ -6,10 +6,16 @@
     android:layout_height="match_parent"
     android:background="@color/neutral_bg">
 
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:id="@+id/scrollAccountContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:visibility="gone">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -258,41 +264,6 @@
             android:layout_marginTop="@dimen/spacing_sm"
             android:orientation="vertical" />
 
-        <!-- Loading state layout when fetching transactions -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/layoutRecentWithdrawalsLoading"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_sm"
-            android:visibility="visible"
-            app:cardBackgroundColor="@color/surface"
-            app:cardCornerRadius="@dimen/corner_radius_lg"
-            app:cardElevation="0dp"
-            app:strokeColor="@color/border_color"
-            app:strokeWidth="1dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="@dimen/spacing_lg">
-
-                <ProgressBar
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:indeterminateTint="@color/primary" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_md"
-                    android:text="Đang tải lịch sử giao dịch..."
-                    android:textColor="@color/text_secondary"
-                    android:textSize="@dimen/text_secondary" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
         <!-- Empty state layout when no transactions exist -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/layoutRecentWithdrawalsEmpty"
@@ -346,4 +317,33 @@
 
     </LinearLayout>
 </ScrollView>
+
+    <!-- Full-screen loading layout -->
+    <LinearLayout
+        android:id="@+id/layoutAccountLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@color/neutral_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="visible">
+
+        <ProgressBar
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:indeterminateTint="@color/primary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:text="@string/loading_account_data"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_body"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</FrameLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

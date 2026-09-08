@@ -14,6 +14,10 @@ public class SessionManager {
     private static final String KEY_BALANCE = "balance";
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
     private static final String KEY_REMEMBER_ME = "remember_me";
+    private static final String KEY_LAST_BANK_NAME = "last_bank_name";
+    private static final String KEY_LAST_BANK_BIN = "last_bank_bin";
+    private static final String KEY_LAST_ACCOUNT_NUMBER = "last_account_number";
+    private static final String KEY_LAST_ACCOUNT_HOLDER = "last_account_holder";
 
     private final SharedPreferences pref;
     private final SharedPreferences.Editor editor;
@@ -87,6 +91,30 @@ public class SessionManager {
 
     public boolean isLoggedIn() {
         return pref.getBoolean(KEY_IS_LOGGED_IN, false);
+    }
+
+    public void saveLastWithdrawAccount(String bankName, String bankBin, String accountNumber, String accountHolder) {
+        editor.putString(KEY_LAST_BANK_NAME, bankName);
+        editor.putString(KEY_LAST_BANK_BIN, bankBin);
+        editor.putString(KEY_LAST_ACCOUNT_NUMBER, accountNumber);
+        editor.putString(KEY_LAST_ACCOUNT_HOLDER, accountHolder);
+        editor.apply();
+    }
+
+    public String getLastWithdrawBankName() {
+        return pref.getString(KEY_LAST_BANK_NAME, "");
+    }
+
+    public String getLastWithdrawBankBin() {
+        return pref.getString(KEY_LAST_BANK_BIN, "");
+    }
+
+    public String getLastWithdrawAccountNumber() {
+        return pref.getString(KEY_LAST_ACCOUNT_NUMBER, "");
+    }
+
+    public String getLastWithdrawAccountHolder() {
+        return pref.getString(KEY_LAST_ACCOUNT_HOLDER, "");
     }
 
     public void clearSession() {

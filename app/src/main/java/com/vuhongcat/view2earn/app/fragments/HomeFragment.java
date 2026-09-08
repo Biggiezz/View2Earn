@@ -30,6 +30,7 @@ import com.google.android.gms.tasks.Task;
 import com.vuhongcat.view2earn.app.BuildConfig;
 import com.vuhongcat.view2earn.app.InviteFriendsActivity;
 import com.vuhongcat.view2earn.app.LoginActivity;
+import com.vuhongcat.view2earn.app.WithdrawActivity;
 import com.vuhongcat.view2earn.app.R;
 import com.vuhongcat.view2earn.app.models.User;
 import com.vuhongcat.view2earn.app.services.HttpRequest;
@@ -55,6 +56,7 @@ public class HomeFragment extends Fragment {
     private TextView tvResetTimer;
     private TextView tvDailyProgressAmount;
     private TextView tvDailyProgressStatus;
+    private MaterialButton btnWithdraw;
     private MaterialButton btnCurrency;
     private MaterialCardView cardWatchAds;
     private MaterialCardView cardRateApp;
@@ -110,6 +112,7 @@ public class HomeFragment extends Fragment {
         tvResetTimer = view.findViewById(R.id.tvResetTimer);
         tvDailyProgressAmount = view.findViewById(R.id.tvDailyProgressAmount);
         tvDailyProgressStatus = view.findViewById(R.id.tvDailyProgressStatus);
+        btnWithdraw = view.findViewById(R.id.btnWithdraw);
         btnCurrency = view.findViewById(R.id.btnCurrency);
         cardWatchAds = view.findViewById(R.id.cardWatchAds);
         cardRateApp = view.findViewById(R.id.cardRateApp);
@@ -122,6 +125,19 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupListeners() {
+        btnWithdraw.setOnClickListener(v -> {
+            if (sessionManager == null || !sessionManager.isLoggedIn()) {
+                if (getContext() != null) {
+                    Toast.makeText(getContext(), "Vui lòng đăng nhập để thực hiện rút tiền!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getContext(), LoginActivity.class));
+                }
+                return;
+            }
+            if (getContext() != null) {
+                startActivity(new Intent(getContext(), WithdrawActivity.class));
+            }
+        });
+
         btnCurrency.setOnClickListener(v -> {
             isUSD = !isUSD;
             btnCurrency.setText(isUSD ? "USD ($)" : "VND (₫)");

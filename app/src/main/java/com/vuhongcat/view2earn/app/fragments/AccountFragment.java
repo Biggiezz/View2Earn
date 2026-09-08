@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,8 @@ import retrofit2.Callback;
 public class AccountFragment extends Fragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
+    private ScrollView scrollAccountContent;
+    private View layoutAccountLoading;
     private TextView tvAvatarChar;
     private TextView tvAccountUsername;
     private TextView tvAccountSubtext;
@@ -50,10 +53,10 @@ public class AccountFragment extends Fragment {
     private MaterialButton btnAccountLogout;
     private LinearLayout layoutRecentWithdrawalsList;
     private View layoutRecentWithdrawalsEmpty;
-    private View layoutRecentWithdrawalsLoading;
 
     private SessionManager sessionManager;
     private boolean isHistoryLoaded = false;
+    private int pendingRequests = 0;
 
     @Nullable
     @Override
@@ -82,6 +85,8 @@ public class AccountFragment extends Fragment {
 
     private void initViews(View view) {
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        scrollAccountContent = view.findViewById(R.id.scrollAccountContent);
+        layoutAccountLoading = view.findViewById(R.id.layoutAccountLoading);
         tvAvatarChar = view.findViewById(R.id.tvAvatarChar);
         tvAccountUsername = view.findViewById(R.id.tvAccountUsername);
         tvAccountSubtext = view.findViewById(R.id.tvAccountSubtext);
@@ -93,7 +98,6 @@ public class AccountFragment extends Fragment {
         btnAccountLogout = view.findViewById(R.id.btnAccountLogout);
         layoutRecentWithdrawalsList = view.findViewById(R.id.layoutRecentWithdrawalsList);
         layoutRecentWithdrawalsEmpty = view.findViewById(R.id.layoutRecentWithdrawalsEmpty);
-        layoutRecentWithdrawalsLoading = view.findViewById(R.id.layoutRecentWithdrawalsLoading);
     }
 
     private void setupListeners() {
@@ -101,7 +105,10 @@ public class AccountFragment extends Fragment {
             btnAccountLogout.setOnClickListener(v -> performLogout());
         }
         if (swipeRefreshLayout != null) {
-            swipeRefreshLayout.setOnRefreshListener(() -> loadAccountData(true));
+            swipeRefreshLayout.setOnRefreshListener(() -> {
+                swipeRefreshLayout.setRefreshing(false);
+                loadAccountData(true);
+            });
         }
     }
 
@@ -123,6 +130,7 @@ public class AccountFragment extends Fragment {
 
         // Nếu đã load thành công và không phải chủ động kéo thả refresh (forceRefresh) thì không load lại
         if (isHistoryLoaded && !forceRefresh) {
+            showFullScreenLoading(false);
             if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -130,6 +138,28 @@ public class AccountFragment extends Fragment {
         }
 
         String userId = sessionManager.getUserId();
+        String token = sessionManager.getToken();
+
+        pendingRequests = 0;
+        if (!userId.isEmpty()) pendingRequests++;
+        if (!token.isEmpty()) {
+            pendingRequests++; // getReferralMe
+            pendingRequests++; // getHistory
+        }
+
+        if (pendingRequests == 0) {
+            isHistoryLoaded = true;
+            showFullScreenLoading(false);
+            if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+            renderTransactions(null);
+            return;
+        }
+
+        // Hiển thị loading toàn màn hình khi tải lại dữ liệu
+        showFullScreenLoading(true);
+
         if (!userId.isEmpty()) {
             HttpRequest.getInstance().call().getUserProfile(userId).enqueue(new Callback<Response<User>>() {
                 @Override
@@ -142,15 +172,16 @@ public class AccountFragment extends Fragment {
                             tvStatAdsWatched.setText(String.valueOf(user.getAdsWatched()));
                         }
                     }
+                    checkLoadingFinished();
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<Response<User>> call, @NonNull Throwable t) {
+                    checkLoadingFinished();
                 }
             });
         }
 
-        String token = sessionManager.getToken();
         if (!token.isEmpty()) {
             String bearerToken = "Bearer " + token;
 
@@ -163,56 +194,58 @@ public class AccountFragment extends Fragment {
                             tvStatReferrals.setText(data.getQualified() + "/" + data.getTotalInvited());
                         }
                     }
+                    checkLoadingFinished();
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<Response<ReferralData>> call, @NonNull Throwable t) {
+                    checkLoadingFinished();
                 }
             });
-
-            // Hiển thị trạng thái loading cho lịch sử giao dịch khi tải lại
-            if (layoutRecentWithdrawalsLoading != null) layoutRecentWithdrawalsLoading.setVisibility(View.VISIBLE);
-            if (layoutRecentWithdrawalsList != null) layoutRecentWithdrawalsList.setVisibility(View.GONE);
-            if (layoutRecentWithdrawalsEmpty != null) layoutRecentWithdrawalsEmpty.setVisibility(View.GONE);
 
             HttpRequest.getInstance().call().getHistory(bearerToken).enqueue(new Callback<Response<HistoryData>>() {
                 @Override
                 public void onResponse(@NonNull Call<Response<HistoryData>> call, @NonNull retrofit2.Response<Response<HistoryData>> response) {
-                    isHistoryLoaded = true;
-                    if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
                     if (response.isSuccessful() && response.body() != null && response.body().isSuccess() && response.body().getData() != null) {
                         List<TransactionItem> items = response.body().getData().getTransactions();
                         renderTransactions(items);
                     } else {
                         renderTransactions(null);
                     }
+                    checkLoadingFinished();
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<Response<HistoryData>> call, @NonNull Throwable t) {
-                    isHistoryLoaded = true;
-                    if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
                     renderTransactions(null);
+                    checkLoadingFinished();
                 }
             });
-        } else {
+        }
+    }
+
+    private void checkLoadingFinished() {
+        pendingRequests--;
+        if (pendingRequests <= 0) {
+            pendingRequests = 0;
             isHistoryLoaded = true;
+            showFullScreenLoading(false);
             if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
                 swipeRefreshLayout.setRefreshing(false);
             }
-            renderTransactions(null);
+        }
+    }
+
+    private void showFullScreenLoading(boolean show) {
+        if (layoutAccountLoading != null) {
+            layoutAccountLoading.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
+        if (scrollAccountContent != null) {
+            scrollAccountContent.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
     private void renderTransactions(List<TransactionItem> items) {
-        if (layoutRecentWithdrawalsLoading != null) {
-            layoutRecentWithdrawalsLoading.setVisibility(View.GONE);
-        }
-
         if (layoutRecentWithdrawalsList == null) return;
         layoutRecentWithdrawalsList.removeAllViews();
 

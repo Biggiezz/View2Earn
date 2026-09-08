@@ -40,4 +40,8 @@ public interface ApiService {
     // Nhập mã giới thiệu của bạn bè nhận thưởng $1.00
     @POST("api/referral/claim")
     Call<Response<Object>> claimReferralCode(@Header("Authorization") String token, @Body Map<String, Object> body);
+
+    // Gửi yêu cầu rút tiền
+    @POST("api/users/withdraw")
+    Call<Response<Object>> requestWithdraw(@Header("Authorization") String token, @Body Map<String, Object> body);
 }

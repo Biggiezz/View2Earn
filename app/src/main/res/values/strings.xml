@@ -61,4 +61,17 @@
     <string name="logout_confirm_message">Bạn có chắc chắn muốn đăng xuất?</string>
     <string name="dialog_confirm">Xác nhận</string>
     <string name="dialog_cancel">Hủy</string>
+
+    <!-- Withdrawal Screen -->
+    <string name="btn_withdraw">Rút tiền</string>
+    <string name="withdrawal_header">Rút tiền</string>
+    <string name="withdrawal_subtitle">Nhập thông tin tài khoản ngân hàng</string>
+    <string name="hint_bank_name">Tên ngân hàng</string>
+    <string name="hint_account_number">Số tài khoản</string>
+    <string name="hint_account_holder">Tên chủ tài khoản</string>
+    <string name="hint_withdraw_amount">Số tiền rút (USD)</string>
+    <string name="hint_withdraw_note">Ghi chú (không bắt buộc)</string>
+    <string name="btn_submit_withdraw">Gửi yêu cầu rút tiền</string>
+    <string name="label_current_balance">Số dư hiện tại</string>
+    <string name="loading_account_data">Đang tải dữ liệu tài khoản...</string>
 </resources>

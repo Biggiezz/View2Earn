@@ -3,9 +3,11 @@ package com.vuhongcat.view2earn.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -27,6 +29,7 @@ import retrofit2.Callback;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private ImageView btnBack;
     private TextInputEditText etEmail;
     private TextInputEditText etPassword;
     private MaterialCheckBox cbRememberMe;
@@ -61,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initViews() {
+        btnBack = findViewById(R.id.btnBack);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         cbRememberMe = findViewById(R.id.cbRememberMe);
@@ -75,6 +79,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
+        btnBack.setOnClickListener(v -> handleBackNavigation());
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                handleBackNavigation();
+            }
+        });
+
         btnLogin.setOnClickListener(v -> {
             String emailOrUsername = etEmail.getText() != null ? etEmail.getText().toString().trim() : "";
             String password = etPassword.getText() != null ? etPassword.getText().toString().trim() : "";
@@ -154,5 +167,14 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
         });
+    }
+
+    private void handleBackNavigation() {
+        if (isTaskRoot()) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
+        finish();
     }
 }

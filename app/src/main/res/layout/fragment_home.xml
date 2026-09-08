@@ -45,30 +45,47 @@
                     android:textSize="@dimen/text_big_number"
                     android:textStyle="bold" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnCurrency"
-                    style="@style/Widget.Material3.Button.TonalButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:layout_marginTop="@dimen/spacing_md"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:paddingHorizontal="@dimen/spacing_md"
-                    android:paddingVertical="0dp"
-                    android:text="@string/currency_usd"
-                    android:textColor="@color/text_primary"
-                    android:textSize="@dimen/text_caption"
-                    android:textStyle="bold"
-                    app:backgroundTint="@color/neutral_bg"
-                    app:cornerRadius="@dimen/corner_radius_sm" />
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_sm"
-                    android:text="@string/subtext_change_currency"
-                    android:textColor="@color/text_hint"
-                    android:textSize="@dimen/text_caption" />
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnWithdraw"
+                        style="@style/Widget.Material3.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="38dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="@dimen/spacing_sm"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:paddingHorizontal="@dimen/spacing_md"
+                        android:paddingVertical="0dp"
+                        android:text="@string/btn_withdraw"
+                        android:textColor="@color/on_primary"
+                        android:textSize="@dimen/text_button"
+                        android:textStyle="bold"
+                        app:backgroundTint="@color/primary"
+                        app:cornerRadius="@dimen/corner_radius_sm" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnCurrency"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="38dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:paddingHorizontal="@dimen/spacing_md"
+                        android:paddingVertical="0dp"
+                        android:text="@string/currency_usd"
+                        android:textColor="@color/text_primary"
+                        android:textSize="@dimen/text_button"
+                        android:textStyle="bold"
+                        app:backgroundTint="@color/neutral_bg"
+                        app:cornerRadius="@dimen/corner_radius_sm" />
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
